@@ -1,0 +1,53 @@
+/* 실물 블로커스 조각 사진에서 뽑은 색.
+   노랑은 금색이 아니라 라임 기운이 도는 반투명 옐로, 초록은 에메랄드 계열이다. */
+:root {
+  --blokus-blue: #2b6fd4;
+  --blokus-yellow: #e3d62a;
+  --blokus-red: #d5292f;
+  --blokus-green: #1d9a57;
+
+  --blokus-blue-dark: #1d4f9c;
+  --blokus-yellow-dark: #b0a512;
+  --blokus-red-dark: #9c1a20;
+  --blokus-green-dark: #12703d;
+
+  --board-bg: #f2ede3;
+  --grid-line: #cfc7b6;
+  --grid-line-strong: #a89e8a;
+
+  --app-bg: #efe9dc;
+  --panel-bg: #ffffff;
+  --panel-border: #ded5c3;
+
+  --ink: #2c2822;
+  --ink-soft: #6d6558;
+  --ink-faint: #9b9284;
+
+  --ok: #1d9a57;
+  --warn: #c8631a;
+  --danger: #d5292f;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  --shadow-panel: 0 1px 2px rgba(44, 40, 34, 0.06), 0 6px 18px rgba(44, 40, 34, 0.07);
+}
+
+/* 색 이름으로 값을 꺼내 쓰기 위한 유틸 클래스 */
+.c-blue {
+  --piece: var(--blokus-blue);
+  --piece-dark: var(--blokus-blue-dark);
+}
+.c-yellow {
+  --piece: var(--blokus-yellow);
+  --piece-dark: var(--blokus-yellow-dark);
+}
+.c-red {
+  --piece: var(--blokus-red);
+  --piece-dark: var(--blokus-red-dark);
+}
+.c-green {
+  --piece: var(--blokus-green);
+  --piece-dark: var(--blokus-green-dark);
+}

@@ -1,0 +1,822 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--app-bg);
+  color: var(--ink);
+  font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+/* ---------- 조각 칸 (보드·썸네일 공용) ---------- */
+
+.sq {
+  background: var(--piece);
+  border-radius: 2px;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.28),
+    inset 1px 1px 0 rgba(255, 255, 255, 0.45),
+    inset -1px -1px 0 rgba(0, 0, 0, 0.18);
+}
+
+/* ---------- 앱 골격 ---------- */
+
+.app {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- 시작 화면 ---------- */
+
+.setup {
+  min-height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 24px 16px 40px;
+}
+
+.setup-card {
+  width: min(560px, 100%);
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-panel);
+  padding: 28px;
+}
+
+.setup-title {
+  font-size: 34px;
+  letter-spacing: 0.08em;
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.setup-sub {
+  text-align: center;
+  color: var(--ink-soft);
+  margin: 0 0 24px;
+  font-size: 14px;
+}
+
+.setup-logo {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.setup-logo > div {
+  display: grid;
+  gap: 2px;
+}
+
+.field {
+  margin-bottom: 20px;
+}
+
+.field > label,
+.field-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  margin-bottom: 8px;
+}
+
+.choice-row {
+  display: flex;
+  gap: 8px;
+}
+
+.choice {
+  flex: 1;
+  padding: 11px 8px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--panel-border);
+  background: #fbf8f2;
+  font-weight: 600;
+  color: var(--ink-soft);
+  transition: all 0.12s ease;
+}
+
+.choice:hover {
+  border-color: var(--ink-faint);
+}
+
+.choice[aria-pressed='true'] {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: #fff;
+}
+
+.name-rows {
+  display: grid;
+  gap: 8px;
+}
+
+.name-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.name-row input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--panel-border);
+  background: #fbf8f2;
+  font: inherit;
+  color: inherit;
+}
+
+.name-row input:focus {
+  outline: none;
+  border-color: var(--ink-faint);
+}
+
+.chips {
+  display: flex;
+  gap: 4px;
+  flex: 0 0 auto;
+}
+
+.chip {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  background: var(--piece);
+  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.5), inset -1px -1px 0 rgba(0, 0, 0, 0.18);
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1.5px solid var(--panel-border);
+  border-radius: var(--radius-md);
+  background: #fbf8f2;
+}
+
+.toggle-row p {
+  margin: 2px 0 0;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+}
+
+.switch {
+  flex: 0 0 auto;
+  width: 46px;
+  height: 27px;
+  border-radius: 999px;
+  background: #d6cdba;
+  position: relative;
+  transition: background 0.15s ease;
+}
+
+.switch[aria-pressed='true'] {
+  background: var(--blokus-green);
+}
+
+.switch::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  transition: transform 0.15s ease;
+}
+
+.switch[aria-pressed='true']::after {
+  transform: translateX(19px);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--panel-border);
+  background: var(--panel-bg);
+  font-weight: 600;
+  color: var(--ink);
+  transition: all 0.12s ease;
+  white-space: nowrap;
+}
+
+.btn:hover:not(:disabled) {
+  border-color: var(--ink-faint);
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #fff;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #423b31;
+}
+
+.btn-block {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+}
+
+.btn-ghost {
+  border-color: transparent;
+  background: transparent;
+  color: var(--ink-soft);
+}
+
+.btn-end {
+  flex: 0 0 auto;
+  width: 100%;
+  margin-bottom: 4px;
+  border-style: dashed;
+  color: var(--ink-soft);
+}
+
+.modal-sm {
+  width: min(420px, 100%);
+}
+
+/* ---------- 게임 화면 ---------- */
+
+.game {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 14px;
+  padding: 12px;
+  /* 기기를 세워 두고 쓰는 화면이라 페이지 전체가 스크롤되지 않게 하고,
+     넘치는 쪽(오른쪽 패널)만 따로 스크롤시킨다 */
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.game-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+.game-side {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  height: 100%;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+
+.side-head {
+  display: flex;
+  gap: 6px;
+}
+
+.side-head .btn {
+  flex: 1;
+  padding: 8px 10px;
+  font-size: 13.5px;
+}
+
+.panel {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-panel);
+  padding: 12px;
+}
+
+/* ---------- 턴 배너 ---------- */
+
+.turn-banner {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-left: 6px solid var(--piece);
+  box-shadow: var(--shadow-panel);
+}
+
+.turn-who {
+  flex: 1;
+  min-width: 0;
+}
+
+.turn-name {
+  font-size: 17px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.turn-hint {
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  margin-top: 1px;
+}
+
+.turn-hint.is-error {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.timer {
+  flex: 0 0 auto;
+  font-variant-numeric: tabular-nums;
+  font-size: 22px;
+  font-weight: 700;
+  padding: 2px 12px;
+  border-radius: var(--radius-sm);
+  background: #f4f0e7;
+  color: var(--ink);
+}
+
+.timer.is-low {
+  color: #fff;
+  background: var(--warn);
+}
+
+.timer.is-out {
+  color: #fff;
+  background: var(--danger);
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.pass-note {
+  width: 100%;
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  background: #fdf3e2;
+  border: 1px solid #e8d5ae;
+  color: #8a5b16;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ---------- 보드 ---------- */
+
+.board-wrap {
+  width: min(100%, calc(100dvh - 150px));
+  aspect-ratio: 1;
+  flex: 0 0 auto;
+}
+
+.board-rotor {
+  width: 100%;
+  height: 100%;
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.board {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  gap: 1px;
+  padding: 3px;
+  background: var(--grid-line);
+  border: 3px solid var(--grid-line-strong);
+  border-radius: 4px;
+  box-shadow: var(--shadow-panel);
+}
+
+/* 조각을 끌어 옮기는 동안 브라우저가 화면을 스크롤하거나 글자를 선택하지 않게 한다.
+   보드는 조각을 고른 상태에서만 막는다 — 고르지 않았을 때는 보드를 쓸어 화면을 넘길 수 있어야 한다. */
+.tray-item,
+.game.is-armed .cell {
+  touch-action: none;
+}
+
+.game.is-dragging {
+  user-select: none;
+  cursor: grabbing;
+}
+
+/* 손끝을 따라다니는 조각. 아래 칸을 가려서는 안 되므로 포인터 이벤트를 받지 않는다 */
+.drag-preview {
+  position: fixed;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.85;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.35));
+}
+
+.cell {
+  position: relative;
+  background: var(--board-bg);
+  padding: 0;
+  border-radius: 1px;
+}
+
+.cell.is-filled {
+  background: var(--piece);
+  border-radius: 2px;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.28),
+    inset 1px 1px 0 rgba(255, 255, 255, 0.45),
+    inset -1px -1px 0 rgba(0, 0, 0, 0.18);
+}
+
+/* 각 색의 시작 코너 표시 */
+.cell.is-start::after {
+  content: '';
+  position: absolute;
+  inset: 22%;
+  border-radius: 50%;
+  background: var(--piece);
+  opacity: 0.5;
+}
+
+.cell.is-ghost-ok {
+  background: var(--piece);
+  opacity: 0.62;
+  border-radius: 2px;
+  outline: 2px solid #fff;
+  outline-offset: -2px;
+}
+
+.cell.is-ghost-bad {
+  background: var(--danger);
+  opacity: 0.42;
+  border-radius: 2px;
+}
+
+/* ---------- 조각 트레이 ---------- */
+
+.tray-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.tray-head h3 {
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.tray-count {
+  font-size: 12px;
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.tray {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+  gap: 6px;
+}
+
+.tray-item {
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  padding: 5px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid transparent;
+  background: #f6f2ea;
+  transition: all 0.1s ease;
+  cursor: grab;
+}
+
+.tray-item:hover:not(:disabled) {
+  background: #ece6da;
+}
+
+.tray-item[aria-pressed='true'] {
+  border-color: var(--ink);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(44, 40, 34, 0.12);
+}
+
+.tray-item:disabled {
+  opacity: 0.18;
+  cursor: default;
+}
+
+.thumb {
+  display: grid;
+  gap: 1px;
+}
+
+.thumb .sq {
+  border-radius: 1px;
+}
+
+/* ---------- 조작 버튼 ---------- */
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.controls .btn {
+  padding: 9px 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.controls .btn-place {
+  flex: 1.6;
+}
+
+/* 드롭만으로는 확정되지 않으므로, 놓을 수 있게 되면 이 버튼이 먼저 눈에 들어와야 한다 */
+.btn-place.is-ready {
+  animation: place-ready 1.6s ease-in-out infinite;
+}
+
+@keyframes place-ready {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(44, 40, 34, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 0 5px rgba(44, 40, 34, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-place.is-ready {
+    animation: none;
+    box-shadow: 0 0 0 3px rgba(44, 40, 34, 0.2);
+  }
+}
+
+.selected-preview {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 62px;
+  height: 62px;
+  border-radius: var(--radius-sm);
+  background: #f6f2ea;
+  border: 1.5px solid var(--panel-border);
+}
+
+/* ---------- 점수판 ---------- */
+
+.score-list {
+  display: grid;
+  gap: 6px;
+}
+
+.score-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  background: #f8f5ef;
+  border: 1.5px solid transparent;
+}
+
+.score-row.is-turn {
+  background: #fff;
+  border-color: var(--ink);
+}
+
+.score-row.is-out {
+  opacity: 0.5;
+}
+
+.score-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.score-name {
+  font-weight: 700;
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.score-meta {
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.score-value {
+  flex: 0 0 auto;
+  font-size: 18px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 모달 ---------- */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(30, 26, 20, 0.5);
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  z-index: 50;
+}
+
+.modal {
+  width: min(560px, 100%);
+  max-height: 86vh;
+  overflow-y: auto;
+  background: var(--panel-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  padding: 24px;
+}
+
+.modal h2 {
+  font-size: 22px;
+  margin-bottom: 14px;
+}
+
+.modal h3 {
+  font-size: 14px;
+  margin: 18px 0 6px;
+}
+
+.modal p,
+.modal li {
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.modal ul {
+  padding-left: 18px;
+  margin: 6px 0;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 22px;
+}
+
+.result-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.result-table th,
+.result-table td {
+  padding: 9px 8px;
+  text-align: right;
+  border-bottom: 1px solid var(--panel-border);
+  font-size: 14px;
+}
+
+.result-table th {
+  font-size: 12px;
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+
+.result-table th:first-child,
+.result-table td:first-child {
+  text-align: left;
+}
+
+.result-table tr.is-winner td {
+  font-weight: 700;
+  background: #fdf8e8;
+}
+
+.rule-example {
+  display: flex;
+  gap: 18px;
+  margin: 10px 0 4px;
+  flex-wrap: wrap;
+}
+
+.mini-board {
+  display: grid;
+  grid-template-columns: repeat(4, 20px);
+  gap: 2px;
+  padding: 3px;
+  background: var(--grid-line);
+  border-radius: 3px;
+}
+
+.mini-board > div {
+  aspect-ratio: 1;
+  background: var(--board-bg);
+  border-radius: 1px;
+}
+
+/* 조각이 놓인 칸은 빈 칸 규칙을 덮어써야 한다 */
+.mini-board > div.sq {
+  background: var(--piece);
+}
+
+.rule-caption {
+  font-size: 12px;
+  margin-top: 5px;
+  font-weight: 600;
+}
+
+.rule-caption.ok {
+  color: var(--ok);
+}
+
+.rule-caption.bad {
+  color: var(--danger);
+}
+
+/* ---------- 반응형 ---------- */
+
+@media (max-width: 900px) {
+  /* 세로로 세운 태블릿·좁은 화면에서는 한 줄로 쌓고 페이지 전체를 스크롤한다 */
+  .game {
+    grid-template-columns: minmax(0, 1fr);
+    height: auto;
+    overflow: visible;
+  }
+
+  .game-main,
+  .game-side {
+    height: auto;
+    overflow: visible;
+  }
+
+  .board-wrap {
+    width: min(100%, 64vh);
+  }
+}
+
+@media (max-width: 480px) {
+  .setup-card {
+    padding: 20px 16px;
+  }
+
+  .controls .btn {
+    padding: 8px 6px;
+    font-size: 13px;
+  }
+}
