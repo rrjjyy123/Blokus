@@ -1,5 +1,4 @@
 import { scoreSeats } from '../game/scoring'
-import { formatClock } from './TurnBanner'
 import type { GameState } from '../game/types'
 
 interface Props {
@@ -35,11 +34,7 @@ export function ScorePanel({ state }: Props) {
               <div className="score-main">
                 <div className="score-name">{seat.name}</div>
                 <div className="score-meta">
-                  남은 {remainingSquares}칸
-                  {state.config.turnSeconds > 0 || state.elapsedBySeat[seat.index] > 0
-                    ? ` · ${formatClock(state.elapsedBySeat[seat.index])}`
-                    : ''}
-                  {allOut ? ' · 종료' : ''}
+                  남은 {remainingSquares}칸{allOut ? ' · 종료' : ''}
                 </div>
               </div>
               <div className="score-value">{total}</div>

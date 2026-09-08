@@ -22,11 +22,10 @@ export type GameAction =
   | { type: 'NUDGE'; dRow: number; dCol: number }
   | { type: 'PLACE' }
   | { type: 'END_NOW' }
-  | { type: 'TICK' }
 
 export const EMPTY_STATE: GameState = {
   phase: 'setup',
-  config: { playerCount: 4, seatNames: [], turnSeconds: 0, autoRotate: true },
+  config: { playerCount: 4, seatNames: [], autoRotate: true },
   boardSize: BOARD_SIZE,
   board: [],
   seats: [],
@@ -37,8 +36,8 @@ export const EMPTY_STATE: GameState = {
   selectedPieceId: null,
   orientationIndex: 0,
   ghost: null,
-  turnRemaining: 0,
-  elapsedBySeat: [],
+  startedAt: 0,
+  endedAt: null,
   lastPassed: [],
   endedEarly: false,
 }
@@ -71,8 +70,8 @@ export function createGame(config: GameConfig): GameState {
     selectedPieceId: null,
     orientationIndex: 0,
     ghost: null,
-    turnRemaining: config.turnSeconds,
-    elapsedBySeat: seats.map(() => 0),
+    startedAt: Date.now(),
+    endedAt: null,
     lastPassed: [],
     endedEarly: false,
   }
@@ -144,13 +143,7 @@ function advanceTurn(state: GameState): GameState {
       cs.played.length === 0,
     )
     if (canPlay) {
-      return {
-        ...state,
-        colors,
-        turnIndex: next,
-        lastPassed: passed,
-        turnRemaining: state.config.turnSeconds,
-      }
+      return { ...state, colors, turnIndex: next, lastPassed: passed }
     }
 
     colors[color] = { ...cs, finished: true }
@@ -158,7 +151,7 @@ function advanceTurn(state: GameState): GameState {
     if (cs.remaining.length > 0) passed.push(color)
   }
 
-  return { ...state, colors, phase: 'over', lastPassed: passed }
+  return { ...state, colors, phase: 'over', endedAt: Date.now(), lastPassed: passed }
 }
 
 export function gameReducer(state: GameState, action: GameAction): GameState {
@@ -251,22 +244,11 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
       return {
         ...state,
         phase: 'over',
+        endedAt: Date.now(),
         endedEarly: true,
         selectedPieceId: null,
         ghost: null,
         lastPassed: [],
-      }
-    }
-
-    case 'TICK': {
-      if (state.phase !== 'playing') return state
-      const seatIndex = currentColorState(state).seatIndex
-      const elapsedBySeat = [...state.elapsedBySeat]
-      elapsedBySeat[seatIndex] += 1
-      return {
-        ...state,
-        elapsedBySeat,
-        turnRemaining: Math.max(0, state.turnRemaining - 1),
       }
     }
 

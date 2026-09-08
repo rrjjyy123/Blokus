@@ -8,12 +8,6 @@ interface Props {
   seat: Seat
 }
 
-export function formatClock(seconds: number): string {
-  const m = Math.floor(seconds / 60)
-  const s = seconds % 60
-  return `${m}:${String(s).padStart(2, '0')}`
-}
-
 function hintFor(state: GameState): { text: string; isError: boolean } {
   if (state.ghost && !state.ghost.result.ok) {
     return { text: PLACEMENT_MESSAGES[state.ghost.result.error ?? ''] ?? '놓을 수 없어요.', isError: true }
@@ -33,12 +27,6 @@ function hintFor(state: GameState): { text: string; isError: boolean } {
 
 export function TurnBanner({ state, color, seat }: Props) {
   const hint = hintFor(state)
-  const useTimer = state.config.turnSeconds > 0
-  const remaining = state.turnRemaining
-
-  const timerClass = ['timer']
-  if (remaining === 0) timerClass.push('is-out')
-  else if (remaining <= 10) timerClass.push('is-low')
 
   return (
     <div className={`turn-banner c-${color}`}>
@@ -54,7 +42,6 @@ export function TurnBanner({ state, color, seat }: Props) {
         </div>
         <div className={`turn-hint${hint.isError ? ' is-error' : ''}`}>{hint.text}</div>
       </div>
-      {useTimer ? <div className={timerClass.join(' ')}>{formatClock(remaining)}</div> : null}
     </div>
   )
 }

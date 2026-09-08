@@ -1,6 +1,11 @@
 import { rankSeats, scoreSeats } from '../game/scoring'
-import { formatClock } from './TurnBanner'
 import type { GameState } from '../game/types'
+
+/** 판이 걸린 시간을 분:초로 */
+function formatDuration(startedAt: number, endedAt: number | null): string {
+  const seconds = Math.max(0, Math.floor(((endedAt ?? Date.now()) - startedAt) / 1000))
+  return `${Math.floor(seconds / 60)}분 ${String(seconds % 60).padStart(2, '0')}초`
+}
 
 interface Props {
   state: GameState
@@ -67,8 +72,7 @@ export function GameOverModal({ state, onRestart, onNewSetup }: Props) {
         </table>
 
         <p style={{ marginTop: 12, fontSize: 12.5 }}>
-          총 {state.moves.length}수 · 플레이 시간{' '}
-          {formatClock(state.elapsedBySeat.reduce((a, b) => a + b, 0))}
+          총 {state.moves.length}수 · {formatDuration(state.startedAt, state.endedAt)}
         </p>
 
         <div className="modal-actions">

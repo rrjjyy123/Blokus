@@ -1,6 +1,6 @@
 import type { GameState } from '../game/types'
 
-const KEY = 'blokus:game:v1'
+const KEY = 'blokus:game:v2'
 
 /**
  * 진행 중인 판을 브라우저에 저장한다.

@@ -7,7 +7,7 @@ import { BOARD_SIZE, CORNERS } from '../variants'
 import type { GameConfig, GameState } from '../types'
 
 function config(playerCount: 2 | 3 | 4, seatNames: string[]): GameConfig {
-  return { playerCount, seatNames, turnSeconds: 0, autoRotate: true }
+  return { playerCount, seatNames, autoRotate: true }
 }
 
 function run(state: GameState, actions: GameAction[]): GameState {
@@ -229,21 +229,34 @@ describe('조각 선택', () => {
   })
 })
 
-describe('타이머', () => {
-  it('현재 좌석의 누적 시간이 쌓이고 남은 시간이 줄어든다', () => {
+describe('판 소요 시간', () => {
+  it('시작 시각을 기록하고 끝나기 전에는 종료 시각이 비어 있다', () => {
+    const before = Date.now()
     const game = createGame(config(4, ['A', 'B', 'C', 'D']))
-    game.config.turnSeconds = 30
-    game.turnRemaining = 30
-
-    const ticked = run(game, [{ type: 'TICK' }, { type: 'TICK' }])
-    expect(ticked.turnRemaining).toBe(28)
-    expect(ticked.elapsedBySeat[0]).toBe(2)
-    expect(ticked.elapsedBySeat[1]).toBe(0)
+    expect(game.startedAt).toBeGreaterThanOrEqual(before)
+    expect(game.endedAt).toBeNull()
   })
 
-  it('남은 시간은 0 아래로 내려가지 않는다', () => {
+  it('중간 정산으로 끝내면 종료 시각이 찍힌다', () => {
     const game = createGame(config(4, ['A', 'B', 'C', 'D']))
-    const ticked = run(game, [{ type: 'TICK' }, { type: 'TICK' }])
-    expect(ticked.turnRemaining).toBe(0)
+    const ended = gameReducer(game, { type: 'END_NOW' })
+    expect(ended.endedAt).not.toBeNull()
+    expect(ended.endedAt!).toBeGreaterThanOrEqual(ended.startedAt)
+  })
+
+  it('전원이 막혀 끝나도 종료 시각이 찍힌다', () => {
+    const game = createGame(config(4, ['A', 'B', 'C', 'D']))
+    for (const color of ['yellow', 'red', 'green'] as const) {
+      game.board[idx(CORNERS[color].row, CORNERS[color].col, BOARD_SIZE)] = 'blue'
+    }
+    game.colors.blue.remaining = ['I1']
+
+    const over = run(game, [
+      { type: 'SELECT_PIECE', pieceId: 'I1' },
+      { type: 'AIM', cell: CORNERS.blue },
+      { type: 'PLACE' },
+    ])
+    expect(over.phase).toBe('over')
+    expect(over.endedAt).not.toBeNull()
   })
 })

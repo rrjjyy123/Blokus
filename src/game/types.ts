@@ -82,12 +82,9 @@ export interface Seat {
   rotation: number
 }
 
-export type TimerSetting = 0 | 30 | 60 | 90
-
 export interface GameConfig {
   playerCount: PlayerCount
   seatNames: string[]
-  turnSeconds: TimerSetting
   autoRotate: boolean
 }
 
@@ -130,10 +127,10 @@ export interface GameState {
   selectedPieceId: PieceId | null
   orientationIndex: number
   ghost: Ghost | null
-  /** 현재 턴에 남은 초. turnSeconds가 0이면 사용하지 않는다 */
-  turnRemaining: number
-  /** 좌석별 누적 사용 시간(초) */
-  elapsedBySeat: number[]
+  /** 판을 시작한 시각 (epoch ms) */
+  startedAt: number
+  /** 판이 끝난 시각 (epoch ms). 진행 중이면 null */
+  endedAt: number | null
   /** 방금 자동 패스된 색들 — 안내 배너용 */
   lastPassed: Color[]
   /** 끝까지 가지 않고 중간에 정산하고 끝냈는가 */

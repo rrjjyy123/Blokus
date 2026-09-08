@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { createSeats, defaultSeatNames } from '../game/variants'
 import { PieceThumb } from './PieceThumb'
-import type { GameConfig, PlayerCount, TimerSetting } from '../game/types'
+import type { GameConfig, PlayerCount } from '../game/types'
 
 interface Props {
   onStart: (config: GameConfig) => void
@@ -9,17 +9,9 @@ interface Props {
   hasSavedGame: boolean
 }
 
-const TIMER_OPTIONS: { value: TimerSetting; label: string }[] = [
-  { value: 0, label: '끄기' },
-  { value: 30, label: '30초' },
-  { value: 60, label: '60초' },
-  { value: 90, label: '90초' },
-]
-
 export function SetupScreen({ onStart, onResume, hasSavedGame }: Props) {
   const [playerCount, setPlayerCount] = useState<PlayerCount>(4)
   const [names, setNames] = useState<string[]>(() => defaultSeatNames(4))
-  const [turnSeconds, setTurnSeconds] = useState<TimerSetting>(0)
   const [autoRotate, setAutoRotate] = useState(true)
 
   function changeCount(count: PlayerCount) {
@@ -27,7 +19,7 @@ export function SetupScreen({ onStart, onResume, hasSavedGame }: Props) {
     setNames(defaultSeatNames(count))
   }
 
-  const seats = createSeats({ playerCount, seatNames: names, turnSeconds, autoRotate })
+  const seats = createSeats({ playerCount, seatNames: names, autoRotate })
 
   return (
     <div className="setup">
@@ -95,26 +87,6 @@ export function SetupScreen({ onStart, onResume, hasSavedGame }: Props) {
         </div>
 
         <div className="field">
-          <span className="field-label">한 턴 제한 시간</span>
-          <div className="choice-row">
-            {TIMER_OPTIONS.map((option) => (
-              <button
-                key={option.value}
-                type="button"
-                className="choice"
-                aria-pressed={turnSeconds === option.value}
-                onClick={() => setTurnSeconds(option.value)}
-              >
-                {option.label}
-              </button>
-            ))}
-          </div>
-          <p style={{ margin: '8px 2px 0', fontSize: 12.5, color: 'var(--ink-soft)' }}>
-            시간이 지나도 강제로 넘기지 않고 표시만 바뀝니다.
-          </p>
-        </div>
-
-        <div className="field">
           <div className="toggle-row">
             <div>
               <strong style={{ fontSize: 14 }}>보드 자동 회전</strong>
@@ -139,7 +111,6 @@ export function SetupScreen({ onStart, onResume, hasSavedGame }: Props) {
             onStart({
               playerCount,
               seatNames: names.map((n, i) => n.trim() || defaultSeatNames(playerCount)[i]),
-              turnSeconds,
               autoRotate,
             })
           }

@@ -36,13 +36,6 @@ export function GameScreen({ state, dispatch, onNewSetup }: Props) {
     ? boardRef.current.getBoundingClientRect().width / state.boardSize
     : 16
 
-  // 턴 타이머
-  useEffect(() => {
-    if (state.phase !== 'playing' || state.config.turnSeconds === 0) return
-    const id = window.setInterval(() => dispatch({ type: 'TICK' }), 1000)
-    return () => window.clearInterval(id)
-  }, [state.phase, state.config.turnSeconds, dispatch])
-
   // 키보드 보조: 방향키로 미세 이동, R/F로 회전·뒤집기, Enter로 놓기
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
