@@ -12,19 +12,6 @@ npm run test     # 규칙·점수 로직 테스트 42개
 npm run build    # dist/ 생성
 ```
 
-## 배포 (Vercel)
-
-프로젝트 폴더에서 아래를 실행하고 안내에 따라 로그인·프로젝트 이름을 정하면 됩니다.
-빌드 설정은 Vercel이 Vite 프로젝트로 자동 인식합니다.
-
-```bash
-npx vercel --prod
-```
-
-GitHub에 올려 두고 Vercel 대시보드에서 저장소를 연결하면, 이후로는 푸시할 때마다 자동 배포됩니다.
-Netlify·GitHub Pages도 동일하게 `npm run build` 결과인 `dist/` 폴더를 올리면 됩니다.
-(GitHub Pages처럼 하위 경로에 올릴 때만 `vite.config.ts`의 `base`를 `'/저장소이름/'`으로 바꿔 주세요.)
-
 ## 게임 규칙 요약
 
 - 20×20 보드, 색당 조각 21종(총 89칸)
